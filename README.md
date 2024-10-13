@@ -2,6 +2,10 @@
 
 <p>Welcome to <strong>Trivo</strong>, a real-time chat application built using <strong>React Native</strong> with <strong>Expo</strong> for the front end, and <strong>Java</strong> with <strong>Hibernate</strong> for the back end. This app allows users to connect, chat with friends, add new friends, and explore friend profiles seamlessly.</p>
 
+<p align="center">
+    <img align="center" src="https://github.com/chamikathereal/Trivio-Front-End/blob/main/assets/images/preview.png" width="80%"></img>
+</p>
+
 <h2>🚀 Features</h2>
 <ul>
   <li><strong>Sign In/Sign Up</strong>: Create an account or log in using your mobile number and password.</li>
@@ -33,6 +37,8 @@ profile.js       // Friend profile view
 <ol>
   <li>Clone the repository.</li>
   <li>Install dependencies using <a href="https://expo.dev/">Expo Documentation</a>.</li>
+  <li>Clone the <a href="https://expo.dev/](https://github.com/chamikathereal/Trivio-Back-End">Trivio Back End</a> repository.</li>
+  <li>Set Up Hibernate</li>
   <li>Start the project with <code>npx expo start</code>.</li>
 </ol>
 
@@ -60,4 +66,4 @@ profile.js       // Friend profile view
 </ol>
 
 <hr>
-<p>Thank you for checking out <strong>Trivo</strong>! 😊</p>
+<p>Thank you for checking out <strong>Trivo</strong>!</p>
