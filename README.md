@@ -37,7 +37,7 @@ profile.js       // Friend profile view
 <ol>
   <li>Clone the repository.</li>
   <li>Install dependencies using <a href="https://expo.dev/">Expo Documentation</a>.</li>
-  <li>Clone the <a href="https://expo.dev/](https://github.com/chamikathereal/Trivio-Back-End">Trivio Back End</a> repository.</li>
+  <li>Clone the <a href="https://github.com/chamikathereal/Trivio-Back-End">Trivio Back End</a> repository.</li>
   <li>Set Up Hibernate</li>
   <li>Start the project with <code>npx expo start</code>.</li>
 </ol>
