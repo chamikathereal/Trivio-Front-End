@@ -1,237 +1,74 @@
-import {
-  ImageBackground,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  Pressable,
-  ScrollView,
-  Alert,
-} from "react-native";
-import { useFonts } from "expo-font";
-import { useEffect, useState } from "react";
-import * as SplashScreen from "expo-splash-screen";
-import { Link, router } from "expo-router";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-// import { SafeAreaView } from "react-native-safe-area-context";
+// import React from 'react';
+// import { View, Text, StyleSheet, Pressable } from 'react-native';
 
-SplashScreen.preventAutoHideAsync();
+// export default function App() {
+//   const sendCommand = async (command) => {
+//     try {
+//       const response = await fetch('http://192.168.43.11:8080/remote-control-car/CommandServlet', {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+//         body: `command=${command}`,
+//       });
+//       console.log(`Command sent: ${command}`);
+//     } catch (error) {
+//       console.error(`Error sending ${command}:`, error);
+//     }
+//   };
 
-export default function SignIn() {
-  const [getMobile, setMobile] = useState("");
-  const [getPassword, setPassword] = useState("");
+//   return (
+//     <View style={styles.container}>
+//       <Pressable
+//         style={styles.button}
+//         onPressIn={() => sendCommand('FORWARD')} // Command starts when pressed
+//         onPressOut={() => sendCommand('STOP')}  // Command stops when released
+//       >
+//         <Text style={styles.buttonText}>Forward</Text>
+//       </Pressable>
 
-  const backgroundImage = require("../assets/images/backgroundImg.jpg");
+//       <Pressable
+//         style={styles.button}
+//         onPressIn={() => sendCommand('BACKWARD')}
+//         onPressOut={() => sendCommand('STOP')}
+//       >
+//         <Text style={styles.buttonText}>Backward</Text>
+//       </Pressable>
 
-  const [loaded, error] = useFonts({
-    "Roboto-Bold": require("../assets/fonts/Roboto-Bold.ttf"),
-    "Roboto-Medium": require("../assets/fonts/Roboto-Medium.ttf"),
-    "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
-  });
+//       <Pressable
+//         style={styles.button}
+//         onPressIn={() => sendCommand('TURN_LEFT')} // Start turning left
+//         onPressOut={() => sendCommand('FORWARD')}  // Continue moving forward after releasing
+//       >
+//         <Text style={styles.buttonText}>Left</Text>
+//       </Pressable>
 
-  useEffect(() => {
-    if (loaded || error) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded, error]);
+//       <Pressable
+//         style={styles.button}
+//         onPressIn={() => sendCommand('TURN_RIGHT')} // Start turning right
+//         onPressOut={() => sendCommand('FORWARD')}  // Continue moving forward after releasing
+//       >
+//         <Text style={styles.buttonText}>Right</Text>
+//       </Pressable>
+//     </View>
+//   );
+// }
 
-  if (!loaded && !error) {
-    return null;
-  }
-
-  return (
-    <SafeAreaView style={styles.container}>
-      <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
-        <View style={styles.header}>
-          <Text style={styles.headerText}>Create Your Account.</Text>
-          <Text style={styles.pharagraphText}>
-            To create your Trivio account, please your details.
-          </Text>
-        </View>
-
-        <ScrollView style={styles.center} showsVerticalScrollIndicator={false}>
-          <View style={styles.inputSetOne}>
-            <Text style={styles.mobileNumber}>Mobile Number</Text>
-            <TextInput
-              style={styles.mobileInput}
-              placeholder="07XXXXXXXX"
-              inputMode="tel"
-              onChangeText={(text) => {
-                setMobile(text);
-              }}
-            />
-            <Text style={styles.mobileNumber}>Password</Text>
-            <TextInput
-              style={styles.mobileInput}
-              secureTextEntry
-              placeholder="********"
-              onChangeText={(text) => {
-                setPassword(text);
-              }}
-            />
-            <Link href="/signUp" style={styles.goToLogin}>
-              Don't have an account? Sign Up.
-            </Link>
-          </View>
-        </ScrollView>
-
-        <View style={styles.footer}>
-          <Pressable
-            style={({ pressed }) => [
-              styles.getStartButton,
-              pressed ? styles.pressedButton : styles.defaultButton,
-            ]}
-            onPress={async () => {
-              let response = await fetch(
-                process.env.EXPO_PUBLIC_URL + "/Trivio-Back-End/SignIn", // Correct URL
-                {
-                  method: "POST", // Ensure it's POST
-                  body: JSON.stringify({
-                    mobile: getMobile,
-                    password: getPassword,
-                  }),
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                }
-              );
-
-              if (response.ok) {
-                let json = await response.json();
-
-                if (json.success) {
-                  let user = json.user;
-                  Alert.alert("Login Successful!", "Hi " + user.name);
-
-                  try {
-                    //store user in async storage
-                    //console.log(user);
-                    await AsyncStorage.setItem("user", JSON.stringify(user));
-                    router.replace("/home");
-                  } catch (e) {
-                    Alert.alert(
-                      "Error",
-                      "Unable to process yor request. Please try again later."
-                    );
-                  }
-                } else {
-                  //problem occured.
-                  Alert.alert("Error", json.message);
-                }
-              }
-            }}
-          >
-            <Text style={styles.getStartButtontexts}>Next</Text>
-          </Pressable>
-        </View>
-      </ImageBackground>
-    </SafeAreaView>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    //backgroundColor: "yellow",
-    //backgroundColor: "#fafafa",
-    backgroundColor: "white",
-  },
-
-  backgroundImage: {
-    width: "100%",
-    height: "100%",
-  },
-
-  header: {
-    width: "100%",
-    paddingHorizontal: 25,
-    paddingVertical: 25,
-    alignItems: "center",
-    //backgroundColor: "blue",
-  },
-
-  headerText: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-
-  pharagraphText: {
-    fontSize: 15,
-    fontWeight: "normal",
-    fontFamily: "Roboto-Medium",
-    textAlign: "center",
-    paddingVertical: 20,
-  },
-
-  center: {
-    flex: 1,
-    width: "auto",
-    paddingHorizontal: 20,
-    //backgroundColor: "red",
-  },
-
-  inputSetOne: {
-    width: "60%",
-    alignSelf: "center",
-  },
-
-  mobileNumber: {
-    fontSize: 16,
-    fontFamily: "Roboto-Medium",
-  },
-
-  mobileInput: {
-    backgroundColor: "#fafafa",
-    width: "100%",
-    height: 40,
-    borderColor: "gray",
-    borderBottomWidth: 2,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginTop: 10,
-    fontFamily: "Roboto-Regular",
-    fontSize: 16,
-    borderColor: "#703eff",
-    marginBottom: 10,
-  },
-
-  goToLogin: {
-    fontSize: 14,
-    textAlign: "center",
-    fontFamily: "Roboto-Medium",
-    color: "#703eff",
-  },
-
-  footer: {
-    width: "100%",
-    //backgroundColor: "blue",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 30,
-  },
-
-  getStartButton: {
-    backgroundColor: "#703eff",
-    width: 300,
-    height: 50,
-    borderRadius: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 10,
-  },
-
-  defaultButton: {
-    backgroundColor: "#703eff",
-  },
-  pressedButton: {
-    backgroundColor: "#5231cc",
-  },
-
-  getStartButtontexts: {
-    fontSize: 20,
-    fontFamily: "Roboto-Medium",
-    color: "white",
-    textAlign: "center",
-  },
-});
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     backgroundColor: '#f2f2f2',
+//   },
+//   button: {
+//     backgroundColor: '#007bff',
+//     paddingVertical: 15,
+//     paddingHorizontal: 40,
+//     borderRadius: 5,
+//     margin: 10,
+//   },
+//   buttonText: {
+//     color: '#fff',
+//     fontSize: 18,
+//     fontWeight: 'bold',
+//   },
+// });
